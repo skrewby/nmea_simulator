@@ -20,5 +20,6 @@ add_executable(${PROJECT_NAME} ${PROJECT_SOURCES})
 set_target_properties(${PROJECT_NAME} PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin
 )
-target_link_libraries(${PROJECT_NAME} PRIVATE nmea)
+target_compile_definitions(${PROJECT_NAME} PRIVATE TOML_HEADER_ONLY=0 TOML_EXCEPTIONS=0)
+target_link_libraries(${PROJECT_NAME} PRIVATE nmea tomlplusplus::tomlplusplus)
 target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_INCLUDE_PATHS})

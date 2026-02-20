@@ -1,14 +1,16 @@
 #include "CLI11.hpp"
+#include "config.hpp"
 #include "nmea/connection.hpp"
 #include "nmea/definitions.hpp"
 #include "nmea/device.hpp"
+#include <algorithm>
 #include <cstdlib>
 #include <expected>
 #include <format>
 #include <print>
 #include <string_view>
 
-std::expected<void, std::string> start(std::string_view interface) {
+std::expected<void, std::string> start(std::string_view interface, const Config &config) {
     auto conn = nmea::connect(interface);
     if (!conn) {
         auto err = std::format("Error on connection: {}", conn.error());
@@ -33,46 +35,47 @@ std::expected<void, std::string> start(std::string_view interface) {
         return std::unexpected(err);
     }
 
-    nmea::message::CogSog cogsog{
-        .sid = 1,
-        .cog_reference = 0,
-        .cog = 0x1234 * 1e-4,
-        .sog = 0x5678 * 1e-2,
-    };
-    auto send_res = device.send(cogsog);
-    if (!send_res) {
-        auto err = std::format("Error sending COGSOG message: {}", send_res.error());
-        return std::unexpected(err);
+    size_t max_count = 0;
+    for (const auto &[pgn, messages] : config.messages) {
+        max_count = std::max(max_count, messages.size());
     }
 
-    nmea::message::Temperature temp{
-        .sid = 2,
-        .instance = 1,
-        .source = 3,
-        .actual_temperature = 0x1234 * 0.01,
-        .set_temperature = 0x5678 * 0.01,
-    };
-    send_res = device.send(temp);
-    if (!send_res) {
-        auto err = std::format("Error sending Temperature message: {}", send_res.error());
-        return std::unexpected(err);
+    for (size_t i = 0; i < max_count; ++i) {
+        for (const auto &[pgn, messages] : config.messages) {
+            if (i >= messages.size()) {
+                continue;
+            }
+            auto send_res = device.send(messages[i]);
+            if (!send_res) {
+                return std::unexpected(std::format("[{}] send error: {}", pgn, send_res.error()));
+            }
+        }
     }
 
     return {};
 }
 
 int main(int argc, char **argv) {
-    CLI::App app{"Actisense Gateway Tester"};
+    CLI::App app{"NMEA Simulator"};
     argv = app.ensure_utf8(argv);
 
     std::string can_interface;
     app.add_option("-c,--can", can_interface, "CAN interface to connect to NMEA2000 network")
         ->default_val("can0");
-
+    std::string config_file_path;
+    app.add_option("-C,--config", config_file_path, "Path to test config file")->required();
     CLI11_PARSE(app, argc, argv);
-    auto res = start(can_interface);
+
+    auto config_res = get_config(config_file_path);
+    if (!config_res) {
+        std::println("Error reading config file: {}", config_res.error());
+        return EXIT_FAILURE;
+    }
+    auto config = std::move(*config_res);
+
+    auto res = start(can_interface, config);
     if (!res) {
-        std::print("{}\n", res.error());
+        std::println("{}", res.error());
         return EXIT_FAILURE;
     }
 
