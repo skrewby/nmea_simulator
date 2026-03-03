@@ -57,6 +57,33 @@ static const std::unordered_map<uint32_t, MessageParser> nmea_messages = {
         {"instance",           field(&nmea::message::Temperature::instance)},
         {"source",             field(&nmea::message::Temperature::source)},
     })},
+    {nmea::pgn::ACTUAL_PRESSURE, make_parser<nmea::message::ActualPressure>({
+        {"instance",    field(&nmea::message::ActualPressure::instance)},
+        {"source",      field(&nmea::message::ActualPressure::source)},
+        {"pressure",    field(&nmea::message::ActualPressure::pressure)},
+    })},
+    {nmea::pgn::ENVIRONMENTAL_PARAMETERS, make_parser<nmea::message::EnvironmentalParameters>({
+        {"temperature_source",      field(&nmea::message::EnvironmentalParameters::temperature_source)},
+        {"humidity_source",         field(&nmea::message::EnvironmentalParameters::humidity_source)},
+        {"temperature",             field(&nmea::message::EnvironmentalParameters::temperature)},
+        {"humidity",                field(&nmea::message::EnvironmentalParameters::humidity)},
+        {"atmospheric_pressure",    field(&nmea::message::EnvironmentalParameters::atmospheric_pressure)},
+    })},
+    {nmea::pgn::POSITION, make_parser<nmea::message::Position>({
+        {"latitude",    field(&nmea::message::Position::latitude)},
+        {"longitude",   field(&nmea::message::Position::longitude)},
+    })},
+    {nmea::pgn::RATE_OF_TURN, make_parser<nmea::message::RateOfTurn>({
+        {"rate",    field(&nmea::message::RateOfTurn::rate)},
+    })},
+    {nmea::pgn::ATTITUDE, make_parser<nmea::message::Attitude>({
+        {"yaw",    field(&nmea::message::Attitude::yaw)},
+        {"pitch",    field(&nmea::message::Attitude::pitch)},
+        {"roll",    field(&nmea::message::Attitude::roll)},
+    })},
+    {nmea::pgn::HEAVE, make_parser<nmea::message::Heave>({
+        {"heave",    field(&nmea::message::Heave::heave)},
+    })},
 };
 // clang-format on
 

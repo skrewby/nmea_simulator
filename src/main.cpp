@@ -61,7 +61,7 @@ static std::expected<int, std::string> open_serial(std::string_view port, speed_
         return std::unexpected(std::format("Failed to open '{}': {}", port, errno));
     }
 
-    struct termios tty {};
+    struct termios tty{};
 
     tcgetattr(fd, &tty);
     cfsetispeed(&tty, baud);

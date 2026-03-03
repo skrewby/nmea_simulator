@@ -1,12 +1,47 @@
 [Simulation]
 
+# COG & SOG, Rapid Update
 [129026]
 cog = [0.30, 0.12]          # radians
 sog = [1.31, 2.40]          # m/s
 cog_reference = [1, 1]      # 0=true, 1=magnetic
 
+# Temperature
 [130312]
 actual_temperature = [300, 213.2, 233.89]   # K
 set_temperature = [0, 0, 1]                 # K
 source = [0, 0, 1]
 instance = [0, 0, 1]
+
+# Actual Pressure
+[130314]
+instance = 0
+source = 0          # Atmospheric
+pressure = 102000   # Pa
+
+# Environmental Parameters
+[130311]
+temperature_source = [0, 1]             # [Sea Temperature, Outside Temperature]
+humidity_source = [0, 1]                # [Inside, Outside]
+temperature = [100, 150]                # K
+humidity = [20, 40]                     # %
+atmospheric_pressure = [150000, 150000] # Pa
+
+# Position, Rapid Update
+[129025]
+latitude = 30   # %
+longitude = 45  # %
+
+# Rate of Turn
+[127251]
+rate = 2    # radians/second
+
+# Attitude
+[127257]
+yaw = 1.1   # radians
+pitch = 1.2 # radians
+roll = 1.3  # radians
+
+# Heave
+[127252]
+heave = 0.5 # meters
