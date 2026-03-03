@@ -77,12 +77,12 @@ static const std::unordered_map<uint32_t, MessageParser> nmea_messages = {
         {"rate",    field(&nmea::message::RateOfTurn::rate)},
     })},
     {nmea::pgn::ATTITUDE, make_parser<nmea::message::Attitude>({
-        {"yaw",    field(&nmea::message::Attitude::yaw)},
-        {"pitch",    field(&nmea::message::Attitude::pitch)},
+        {"yaw",     field(&nmea::message::Attitude::yaw)},
+        {"pitch",   field(&nmea::message::Attitude::pitch)},
         {"roll",    field(&nmea::message::Attitude::roll)},
     })},
     {nmea::pgn::HEAVE, make_parser<nmea::message::Heave>({
-        {"heave",    field(&nmea::message::Heave::heave)},
+        {"heave",   field(&nmea::message::Heave::heave)},
     })},
 };
 // clang-format on
