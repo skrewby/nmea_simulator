@@ -15,9 +15,9 @@ instance = [0, 0, 1]
 
 # Actual Pressure
 [130314]
-instance = 0
-source = 0          # Atmospheric
-pressure = 102000   # Pa
+instance = [0]
+source = [0]          # Atmospheric
+pressure = [102000]   # Pa
 
 # Environmental Parameters
 [130311]
@@ -29,19 +29,19 @@ atmospheric_pressure = [150000, 150000] # Pa
 
 # Position, Rapid Update
 [129025]
-latitude = 30   # %
-longitude = 45  # %
+latitude = [30]     # %
+longitude = [45]    # %
 
 # Rate of Turn
 [127251]
-rate = 2    # radians/second
+rate = [2]    # radians/second
 
 # Attitude
 [127257]
-yaw = 1.1   # radians
-pitch = 1.2 # radians
-roll = 1.3  # radians
+yaw = [1.1]   # radians
+pitch = [1.2] # radians
+roll = [1.3]  # radians
 
 # Heave
 [127252]
-heave = 0.5 # meters
+heave = [0.5] # meters
