@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build-firmware:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        preset: [Debug, Release]
+    steps:
+      - uses: actions/checkout@v5
+      - uses: lukka/get-cmake@v4.4.0
+        with:
+          cmakeVersion: "4.4.0"
+      - uses: carlosperate/arm-none-eabi-gcc-action@v1.13.0
+      - name: Configure
+        working-directory: firmware
+        run: cmake --preset ${{ matrix.preset }}
+      - name: Build
+        working-directory: firmware
+        run: cmake --build --preset ${{ matrix.preset }}
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: lukka/get-cmake@v4.4.0
+        with:
+          cmakeVersion: "4.4.0"
+      - name: Configure
+        working-directory: firmware
+        run: cmake --preset Tests
+      - name: Build
+        working-directory: firmware
+        run: cmake --build --preset Tests
+      - name: Run tests
+        working-directory: firmware
+        run: ctest --test-dir build/Tests --output-on-failure

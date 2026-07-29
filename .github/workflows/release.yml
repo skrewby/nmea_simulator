@@ -1,0 +1,47 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Check tag matches PROJECT_VERSION
+        working-directory: firmware
+        run: |
+          tag_version="${GITHUB_REF_NAME#v}"
+          project_version=$(sed -n 's/^project([^ ]* VERSION \([0-9.]*\).*/\1/p' CMakeLists.txt)
+          if [ "$tag_version" != "$project_version" ]; then
+            echo "::error::Tag $GITHUB_REF_NAME (version $tag_version) does not match PROJECT_VERSION $project_version in CMakeLists.txt"
+            exit 1
+          fi
+      - uses: lukka/get-cmake@v4.4.0
+        with:
+          cmakeVersion: "4.4.0"
+      - uses: carlosperate/arm-none-eabi-gcc-action@v1.13.0
+      - name: Configure
+        working-directory: firmware
+        run: cmake --preset Release
+      - name: Build
+        working-directory: firmware
+        run: cmake --build --preset Release
+      - uses: typst-community/setup-typst@v5
+        with:
+          typst-version: "0.15.1"
+      - name: Build ICD
+        run: typst compile docs/icd/src/main.typ ICD.pdf
+      - name: Release
+        uses: softprops/action-gh-release@v3.0.2
+        with:
+          files: |
+            firmware/bin/Release/nmea_sim.elf
+            firmware/bin/Release/nmea_sim.bin
+            firmware/bin/Release/nmea_sim.hex
+            ICD.pdf
+          generate_release_notes: true
