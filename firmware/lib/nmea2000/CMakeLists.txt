@@ -13,6 +13,6 @@ target_include_directories(${LIBRARY_NAME} PRIVATE src)
 target_link_libraries(${LIBRARY_NAME} PUBLIC m)
 target_link_libraries(${LIBRARY_NAME} PRIVATE warnings)
 
-if(ENABLE_TESTS)
+if(ENABLE_TESTS OR ENABLE_SIMULATOR)
     target_link_libraries(${LIBRARY_NAME} PRIVATE sanitizers)
 endif()

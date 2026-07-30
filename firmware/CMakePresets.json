@@ -33,6 +33,14 @@
         "CMAKE_BUILD_TYPE": "Tests",
         "ENABLE_TESTS": "TRUE"
       }
+    },
+    {
+      "name": "Simulator",
+      "inherits": "default",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "ENABLE_SIMULATOR": "TRUE"
+      }
     }
   ],
   "buildPresets": [
@@ -47,6 +55,10 @@
     {
       "name": "Tests",
       "configurePreset": "Tests"
+    },
+    {
+      "name": "Simulator",
+      "configurePreset": "Simulator"
     }
   ]
 }

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Board Simulator</title>
+  </head>
+  <body>
+    <h1>Board Simulator</h1>
+    <p id="status">Connecting...</p>
+    <pre id="log"></pre>
+    <script>
+      const status = document.getElementById("status");
+      const log = document.getElementById("log");
+      const ws = new WebSocket("ws://" + location.host + "/ws");
+
+      const MAX_LOG_LINES = 50;
+      const messages = [];
+
+      ws.onopen = () => {
+        status.textContent = "Connected";
+      };
+      ws.onclose = () => {
+        status.textContent = "Disconnected";
+      };
+      ws.onmessage = (event) => {
+        messages.push(event.data);
+        if (messages.length > MAX_LOG_LINES) {
+          messages.shift();
+        }
+        log.textContent = messages.join("\n");
+      };
+    </script>
+  </body>
+</html>
