@@ -213,6 +213,11 @@ void ws_server_publish_gpio(const char *id, State_GPIO *gpio) {
     publish("gpio", data);
 }
 
+void ws_server_publish_serial(const char *id, const char *buf, uint16_t len) {
+    json_t *data = json_pack("{s:s, s:o}", "id", id, "data", json_stringn(buf, len));
+    publish("serial", data);
+}
+
 void ws_server_publish_full_state(State *state) {
     json_t *gpio = json_object();
     for (int i = 0; i < BSP_LED_COUNT; i++) {

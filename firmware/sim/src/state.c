@@ -7,6 +7,10 @@ static const char *LED_NAMES[] = {
     "Status",
 };
 
+static const char *SERIAL_NAMES[] = {
+    "Log",
+};
+
 void state_init(void) {}
 
 void state_toggle_led(BSP_LED led) {
@@ -15,5 +19,7 @@ void state_toggle_led(BSP_LED led) {
 }
 
 const char *state_led_name(BSP_LED led) { return LED_NAMES[led]; }
+
+const char *state_serial_name(BSP_SERIAL serial) { return SERIAL_NAMES[serial]; }
 
 State *state_get(void) { return &state; }
