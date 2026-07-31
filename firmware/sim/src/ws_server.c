@@ -233,3 +233,17 @@ void ws_server_publish_full_state(State *state) {
 
     publish("full_state", data);
 }
+
+void ws_server_publish_can(uint32_t can_id, const uint8_t *can_data, size_t can_data_len) {
+    json_t *arr = json_array();
+    for (size_t i = 0; i < can_data_len; i++) {
+        uint8_t byte = can_data[i];
+        json_array_append_new(arr, json_integer(byte));
+    }
+
+    json_t *data = json_object();
+    json_object_set_new(data, "id", json_integer(can_id));
+    json_object_set_new(data, "data", arr);
+
+    publish("can", data);
+}
