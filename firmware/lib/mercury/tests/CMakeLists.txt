@@ -1,0 +1,11 @@
+file(GLOB TEST_SOURCES CONFIGURE_DEPENDS "test_*.c")
+
+foreach(test_source ${TEST_SOURCES})
+    get_filename_component(test_name ${test_source} NAME_WE)
+    set(test_name lib_mercury_${test_name})
+    add_executable(${test_name} ${test_source})
+    target_link_libraries(${test_name} PRIVATE mercury unity warnings sanitizers)
+    target_include_directories(${test_name} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../src)
+    add_test(NAME ${test_name} COMMAND ${test_name})
+    set_tests_properties(${test_name} PROPERTIES TIMEOUT 30)
+endforeach()

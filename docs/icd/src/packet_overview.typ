@@ -9,11 +9,12 @@
   [2 - 3], [uint16], [CMD_ID], [Command ID],
   [4], [uint8], [LENGTH], [Number of data bytes transmitted (n)],
   [n], [-], [DATA], [Data bytes],
-  [(4+n) - (5+n)], [uint16], [CRC16], [Cyclic redundancy check],
+  [(5+n) - (6+n)], [uint16], [CRC16], [Cyclic redundancy check],
 )
 
 == Notes
 
+- The response of a command is the Command ID & 0x8000
 - Consistent Overhead Byte Stuffing (COBS) used for packet framing. Each COBS-encoded packet is preceded and followed by a 0x00 delimiter byte.
 - CRC16 is computed over VERSION through DATA (i.e. all packet fields except CRC16 itself), before COBS encoding is applied to the packet.
 - Multi-byte values (command ID, length, data, crc) are sent in little-endian order

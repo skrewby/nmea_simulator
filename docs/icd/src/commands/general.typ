@@ -20,7 +20,7 @@
 
 #packet(
   title: "Response",
-  cmd-id: [0x0100],
+  cmd-id: [0x8100],
   length: [7],
   data-field([0 - 3], [Serial], [uint32], [Device serial number]),
   data-field([4], [FW_Ver_Major], [uint8], [Firmware version - Major Number]),
@@ -39,8 +39,8 @@
 
 #packet(
   title: "Response",
-  cmd-id: [0x0101],
-  length: [1],
+  cmd-id: [0x8101],
+  length: [2],
   data-field([0], [Status], [uint8], [Status]),
   data-field([1], [Mode], [uint8], [Current device mode]),
 )

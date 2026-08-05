@@ -64,9 +64,9 @@ if(NOT ENABLE_TESTS)
     target_compile_definitions(${PROJECT_NAME} PRIVATE $<$<CONFIG:Debug>:FW_ASSERT_DEBUG>)
 
     if(ENABLE_SIMULATOR)
-        target_link_libraries(${PROJECT_NAME} PRIVATE bsp_sim nmea2000 warnings sanitizers)
+        target_link_libraries(${PROJECT_NAME} PRIVATE bsp_sim nmea2000 mercury warnings sanitizers)
     else()
-        target_link_libraries(${PROJECT_NAME} PRIVATE bsp nmea2000 warnings)
+        target_link_libraries(${PROJECT_NAME} PRIVATE bsp nmea2000 mercury warnings)
 
         add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
             COMMAND ${CMAKE_OBJCOPY} -O binary $<TARGET_FILE:${PROJECT_NAME}> $<TARGET_FILE_DIR:${PROJECT_NAME}>/${PROJECT_NAME}.bin

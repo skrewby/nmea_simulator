@@ -10,3 +10,4 @@ if(ENABLE_TESTS)
 endif()
 
 add_subdirectory(nmea2000)
+add_subdirectory(mercury)
